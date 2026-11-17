@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 export function BookingListSkeleton() {
   return (
     <div aria-busy aria-label="Loading bookings" role="status">
-      <div className="grid grid-cols-2 border-y border-line sm:grid-cols-4">
+      <div className="border-line grid grid-cols-2 border-y sm:grid-cols-4">
         {Array.from({ length: 4 }, (_, i) => (
           <div key={i} className="flex flex-col gap-3 px-5 py-6 sm:py-8">
             <Skeleton className="h-12 w-16" />
@@ -13,7 +13,7 @@ export function BookingListSkeleton() {
       </div>
       <ul className="mt-8 flex flex-col gap-3">
         {Array.from({ length: 5 }, (_, i) => (
-          <li key={i} className="flex items-center gap-6 rounded-3xl border border-line bg-surface p-5">
+          <li key={i} className="border-line bg-surface flex items-center gap-6 rounded-3xl border p-5">
             <Skeleton className="size-12 rounded-2xl" />
             <div className="flex-1 space-y-2">
               <Skeleton className="h-4 w-40" />
@@ -31,7 +31,7 @@ export function BookingListSkeleton() {
 export function BookingDetailSkeleton() {
   return (
     <div aria-busy aria-label="Loading booking" role="status" className="grid gap-4 lg:grid-cols-[1.35fr_1fr]">
-      <div className="space-y-6 rounded-3xl border border-line bg-surface p-6">
+      <div className="border-line bg-surface space-y-6 rounded-3xl border p-6">
         <div className="flex items-center gap-4">
           <Skeleton className="size-14 rounded-2xl" />
           <div className="space-y-2">

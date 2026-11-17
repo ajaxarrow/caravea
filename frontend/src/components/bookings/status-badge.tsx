@@ -22,7 +22,7 @@ export function StatusBadge({ status, className }: { status: BookingStatus; clas
   return (
     <span
       className={cn(
-        "inline-flex h-7 items-center gap-2 rounded-full border border-line bg-surface px-3 text-[13px] text-ink",
+        "border-line bg-surface text-ink inline-flex h-7 items-center gap-2 rounded-full border px-3 text-[13px]",
         status === "cancelled" && "text-muted-ink",
         className,
       )}

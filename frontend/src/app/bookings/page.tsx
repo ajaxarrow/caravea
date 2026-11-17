@@ -50,9 +50,7 @@ async function BookingResults({ searchParams }: Pick<PageProps<"/bookings">, "se
         <h2 id="bookings-title" className="text-2xl font-normal tracking-tight">
           {query.status ? `${STATUS_LABELS[query.status]} bookings` : "Workshop bookings"}
         </h2>
-        <p className="text-[13px] text-muted-ink">
-          Times shown in {timeZoneCity(workshop.timezone)} time
-        </p>
+        <p className="text-muted-ink text-[13px]">Times shown in {timeZoneCity(workshop.timezone)} time</p>
       </div>
 
       <StatusFilter active={query.status} counts={meta.status_counts} />
@@ -95,9 +93,9 @@ async function BookingResults({ searchParams }: Pick<PageProps<"/bookings">, "se
 
 function EmptyState({ title, body, action }: { title: string; body: string; action: { href: string; label: string } }) {
   return (
-    <div className="mt-8 flex flex-col items-center rounded-3xl border border-dashed border-line-strong px-6 py-16 text-center">
-      <p className="text-lg text-ink">{title}</p>
-      <p className="mt-1 text-[15px] text-muted-ink">{body}</p>
+    <div className="border-line-strong mt-8 flex flex-col items-center rounded-3xl border border-dashed px-6 py-16 text-center">
+      <p className="text-ink text-lg">{title}</p>
+      <p className="text-muted-ink mt-1 text-[15px]">{body}</p>
       <Link href={action.href} className={buttonVariants({ className: "mt-6" })}>
         {action.label}
       </Link>

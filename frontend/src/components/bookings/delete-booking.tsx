@@ -14,7 +14,7 @@ export function DeleteBooking({ bookingId }: { bookingId: number }) {
 
   if (!confirming) {
     return (
-      <Button variant="ghost" className="w-full text-danger hover:bg-danger/5" onClick={() => setConfirming(true)}>
+      <Button variant="ghost" className="text-danger hover:bg-danger/5 w-full" onClick={() => setConfirming(true)}>
         <TrashIcon aria-hidden />
         Delete booking
       </Button>
@@ -22,8 +22,10 @@ export function DeleteBooking({ bookingId }: { bookingId: number }) {
   }
 
   return (
-    <div role="group" aria-label="Confirm delete" className="rounded-2xl border border-danger/30 bg-danger/5 p-4">
-      <p className="text-[14px] text-ink">Delete this booking? This can&apos;t be undone. To keep a record, cancel it instead.</p>
+    <div role="group" aria-label="Confirm delete" className="border-danger/30 bg-danger/5 rounded-2xl border p-4">
+      <p className="text-ink text-[14px]">
+        Delete this booking? This can&apos;t be undone. To keep a record, cancel it instead.
+      </p>
       <div className="mt-3 flex gap-2">
         <Button
           variant="destructive"
@@ -43,7 +45,7 @@ export function DeleteBooking({ bookingId }: { bookingId: number }) {
         </Button>
       </div>
       {error && (
-        <p role="alert" className="mt-2 text-[13px] text-danger">
+        <p role="alert" className="text-danger mt-2 text-[13px]">
           {error}
         </p>
       )}

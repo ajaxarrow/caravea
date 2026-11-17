@@ -60,7 +60,7 @@ export function QuickStatus({
         ))}
       </div>
       {error && (
-        <p role="alert" className="max-w-64 text-right text-[12px] leading-snug text-danger">
+        <p role="alert" className="text-danger max-w-64 text-right text-[12px] leading-snug">
           {error}
         </p>
       )}
