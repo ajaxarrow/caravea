@@ -42,8 +42,9 @@ npm run dev
 | `backend` | `php artisan test` | 73 Pest tests: CRUD, pagination and filters, every validation rule, overlap edge cases, N+1 guard, and a real multi-process race |
 | `frontend` | `npm test` | Vitest: URL parsing, workshop-timezone formatting (incl. DST), Laravel error → field mapping |
 | `frontend` | `npm run e2e` | Playwright on the full stack (own SQLite DB + production build): create, field errors, overlap error, URL filter/pagination, in-place list updates with no reload, edit, not-found |
+| `frontend` | `npm run e2e` (`states` suite) | Every page's loading and error state, and every write's saving and failure state. A test-only proxy between Next and Laravel ([`fault-proxy.mjs`](frontend/e2e/support/fault-proxy.mjs)) makes chosen API calls slow, fail, or unreachable. Any uncaught browser error fails a test |
 
-`npm run e2e` starts both servers itself. Run `npx playwright install chromium` the first time.
+`npm run e2e` starts Laravel, the fault proxy and Next itself. Run `npx playwright install chromium` the first time.
 
 ## What's where
 
@@ -52,22 +53,25 @@ npm run dev
 - **Validation:** [`BookingRequest`](backend/app/Http/Requests/Bookings/BookingRequest.php) and its Store/Update
   subclasses. Times arrive as the dealer's wall-clock time and are stored in UTC.
 - **Data and caching:** [`queries.ts`](frontend/src/lib/bookings/queries.ts) (reads),
-  [`actions.ts`](frontend/src/lib/bookings/actions.ts) (writes), [`cache.ts`](frontend/src/lib/bookings/cache.ts) (tags).
+  [`actions.ts`](frontend/src/lib/bookings/actions.ts) (writes), [`cache.ts`](frontend/src/lib/bookings/cache.ts) (what's
+  cached, and why so little).
 - **Ids:** bookings use UUIDv7 primary keys, so they can't be guessed or enumerated from a URL, and they stay
   time-ordered for the index. Malformed ids are rejected before any query, in both Laravel and Next.
 - **List:** [`app/bookings/page.tsx`](frontend/src/app/bookings/page.tsx). `?status=&page=` is the only state.
 
 ## Senior write-up
 
-**Caching and revalidation.** Reads are `'use cache'` functions with narrow tags: `bookings:list` and
-`bookings:{id}`. Every Server Action calls `updateTag` on just the tags it affects, so the author sees the change
-immediately: Next re-renders the current route in the action's own response, which is how the list updates without a
-reload. Bookings have a short lifetime (30s revalidate, 5min expire), because other staff edit the same data and this
-app isn't told about changes made elsewhere. A stale list can never cause a double booking, because the API re-checks
-every write. Bays and the timezone are cached for hours. The pages read `searchParams` and `params` inside
-`<Suspense>`, so the header and hero are in the static shell and paint instantly while results stream. Trade-off: a
-missing booking renders the not-found UI with `noindex` but a 200 status, since the shell has already been sent.
-That's fine for a staff tool. A public page would check in Proxy instead.
+**Caching and revalidation.** Bookings are not cached in Next. They're live data that several staff edit, and
+the Laravel query behind them is indexed and cheap. React `cache()` only dedupes reads within one render. I started
+with `'use cache'` plus narrow tags expired by `updateTag`, but the fault-injection e2e suite caught Next 16.4 serving
+a list from before a write. Its tag manifest is stamped with two different clocks (`performance.now()` and
+`Date.now()`), and once they drift apart a just-expired tag looks like it expires in the future. For operational
+data, reading fresh beats a cache I can't trust. What is cached: the bays and timezone (`'use cache'`, hours, tag
+`workshop`). After a write, actions redirect, or call `refresh()` to re-render the current route in the same response,
+which is how the list updates without a reload. Pages read `searchParams`/`params` inside `<Suspense>`, so the header
+and hero are a prerendered static shell that paints instantly while data streams. A missing booking renders the
+not-found UI with a 200 (the shell has already been sent). An `X-Robots-Tag: noindex` header keeps the whole internal
+tool out of search engines.
 
 **Two simultaneous bookings.** Validation alone can't hold this: both requests pass it before either writes. So the
 check runs inside the write transaction, after taking a lock both requests need. The first statement is an `UPDATE`
@@ -85,8 +89,8 @@ as a database-level backstop.
    through it, so `/bookings/{id}` from another dealer is a 404. Policies replace `authorize(): true`. Add a test
    that every query on these models is company-scoped.
 2. Make the timezone per company instead of app config, which is already the only thing read for it.
-3. Prefix cache tags with the company (`c:{id}:bookings:list`) so one dealer's write never expires another's
-   cache, and move to a shared cache handler (`'use cache: remote'`/Redis) once there's more than one Next instance.
+3. Key the cached workshop data by company, and if read load ever justifies caching bookings, do it with a shared
+   handler (Redis via `'use cache: remote'`) and per-company tags, not the in-memory default.
 4. Emit a `BookingChanged` event (Reverb plus tag revalidation) so other staff see changes live instead of
    within 30s.
 5. Move to Postgres with the exclusion constraint above, and composite indexes leading with `company_id`.
