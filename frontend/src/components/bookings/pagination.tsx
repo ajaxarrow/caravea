@@ -32,17 +32,16 @@ export function Pagination({
       </PageLink>
 
       <div className="flex flex-1 items-center gap-4">
-        <span aria-hidden className="relative h-px flex-1 bg-line">
-          <span className="absolute inset-y-0 left-0 bg-ink" style={{ width: `${progress}%` }} />
+        <span aria-hidden className="bg-line relative h-px flex-1">
+          <span className="bg-ink absolute inset-y-0 left-0" style={{ width: `${progress}%` }} />
         </span>
-        <p className="tabular text-[13px] text-muted-ink">
-          <span className="sr-only">
-            Showing {from}–{to} of {total}.{" "}
+        <p className="tabular text-muted-ink text-[13px]">
+          <span aria-hidden>
+            <span className="text-ink">{page}</span> / {lastPage}
           </span>
-          <span className="text-ink">{page}</span>
-          <span aria-hidden> / </span>
-          <span className="sr-only"> of </span>
-          {lastPage}
+          <span className="sr-only">
+            Page {page} of {lastPage}, showing {from}–{to} of {total} bookings
+          </span>
         </p>
       </div>
 
