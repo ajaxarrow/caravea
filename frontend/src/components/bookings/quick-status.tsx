@@ -27,7 +27,7 @@ export function QuickStatus({
   customerName,
   className,
 }: {
-  bookingId: number
+  bookingId: string
   status: BookingStatus
   customerName: string
   className?: string

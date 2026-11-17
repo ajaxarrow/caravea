@@ -39,7 +39,7 @@ npm run dev
 
 | Where | Command | Covers |
 | --- | --- | --- |
-| `backend` | `php artisan test` | 70 Pest tests: CRUD, pagination and filters, every validation rule, overlap edge cases, N+1 guard, and a real multi-process race |
+| `backend` | `php artisan test` | 73 Pest tests: CRUD, pagination and filters, every validation rule, overlap edge cases, N+1 guard, and a real multi-process race |
 | `frontend` | `npm test` | Vitest: URL parsing, workshop-timezone formatting (incl. DST), Laravel error → field mapping |
 | `frontend` | `npm run e2e` | Playwright on the full stack (own SQLite DB + production build): create, field errors, overlap error, URL filter/pagination, in-place list updates with no reload, edit, not-found |
 
@@ -53,6 +53,8 @@ npm run dev
   subclasses. Times arrive as the dealer's wall-clock time and are stored in UTC.
 - **Data and caching:** [`queries.ts`](frontend/src/lib/bookings/queries.ts) (reads),
   [`actions.ts`](frontend/src/lib/bookings/actions.ts) (writes), [`cache.ts`](frontend/src/lib/bookings/cache.ts) (tags).
+- **Ids:** bookings use UUIDv7 primary keys, so they can't be guessed or enumerated from a URL, and they stay
+  time-ordered for the index. Malformed ids are rejected before any query, in both Laravel and Next.
 - **List:** [`app/bookings/page.tsx`](frontend/src/app/bookings/page.tsx). `?status=&page=` is the only state.
 
 ## Senior write-up

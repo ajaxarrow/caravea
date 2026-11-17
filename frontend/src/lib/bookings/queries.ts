@@ -22,7 +22,7 @@ export async function getBookings({ status, page }: BookingsQuery): Promise<Book
 }
 
 /** Returns null when the booking doesn't exist, so the page can call notFound(). */
-export async function getBooking(id: number): Promise<Booking | null> {
+export async function getBooking(id: string): Promise<Booking | null> {
   "use cache"
   cacheTag(tags.booking(id))
   cacheLife(BOOKINGS_CACHE_LIFE)

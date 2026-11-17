@@ -5,7 +5,7 @@
  */
 export const tags = {
   list: "bookings:list",
-  booking: (id: number) => `bookings:${id}`,
+  booking: (id: string) => `bookings:${id}`,
   workshop: "workshop",
 } as const
 

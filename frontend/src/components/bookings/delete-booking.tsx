@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { deleteBooking } from "@/lib/bookings/actions"
 
 /** Two-step delete: the first click asks, the second deletes. */
-export function DeleteBooking({ bookingId }: { bookingId: number }) {
+export function DeleteBooking({ bookingId }: { bookingId: string }) {
   const [confirming, setConfirming] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()

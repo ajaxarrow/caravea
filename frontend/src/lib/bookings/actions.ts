@@ -7,6 +7,7 @@ import { api, ApiError, ValidationError } from "@/lib/api"
 
 import { tags } from "./cache"
 import { mapValidationErrors, readBookingForm, toApiPayload, type BookingFormState } from "./form"
+import { parseBookingId } from "./search-params"
 import { isBookingStatus, type Booking, type BookingFormValues, type BookingStatus } from "./types"
 
 /*
@@ -32,7 +33,7 @@ export async function createBooking(_prev: BookingFormState, formData: FormData)
 }
 
 export async function updateBooking(
-  id: number,
+  id: string,
   _prev: BookingFormState,
   formData: FormData,
 ): Promise<BookingFormState> {
@@ -53,7 +54,7 @@ export async function updateBooking(
 export type QuickActionResult = { ok: true } | { ok: false; message: string }
 
 /** Confirm / cancel / re-open straight from the list or detail page. */
-export async function setBookingStatus(id: number, status: BookingStatus): Promise<QuickActionResult> {
+export async function setBookingStatus(id: string, status: BookingStatus): Promise<QuickActionResult> {
   assertId(id)
   if (!isBookingStatus(status)) return { ok: false, message: "Unknown status." }
 
@@ -70,7 +71,7 @@ export async function setBookingStatus(id: number, status: BookingStatus): Promi
   return { ok: true }
 }
 
-export async function deleteBooking(id: number): Promise<QuickActionResult> {
+export async function deleteBooking(id: string): Promise<QuickActionResult> {
   assertId(id)
 
   try {
@@ -113,6 +114,6 @@ function messageFor(error: unknown): string {
   return "Something went wrong talking to the bookings service. Please try again."
 }
 
-function assertId(id: number): void {
-  if (!Number.isSafeInteger(id) || id <= 0) throw new Error("Invalid booking id")
+function assertId(id: string): void {
+  if (parseBookingId(id) === null) throw new Error("Invalid booking id")
 }

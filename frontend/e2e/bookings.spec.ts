@@ -56,7 +56,7 @@ test("creates a booking and shows it in the list without a full page reload", as
   })
   await page.getByRole("button", { name: "Create booking" }).click()
 
-  await expect(page).toHaveURL(/\/bookings\/\d+\?saved=created$/)
+  await expect(page).toHaveURL(/\/bookings\/[0-9a-f-]{36}\?saved=created$/)
   await expect(page.getByText("Booking created.")).toBeVisible()
   await expect(page.getByRole("heading", { name: "Ada Lovelace" })).toBeVisible()
   await expect(page.getByText("ADA101")).toBeVisible()
@@ -207,10 +207,14 @@ test("edits a booking with its times pre-filled in workshop time", async ({ page
 })
 
 test("shows a not-found page for a booking that doesn't exist", async ({ page }) => {
-  await page.goto("/bookings/999999")
+  await page.goto("/bookings/0194f3a2-7c1e-7b2a-9c4d-1a2b3c4d5e6f")
   await expect(page.getByRole("heading", { name: "Booking not found" })).toBeVisible()
   await expect(page.locator('head meta[name="robots"]')).toHaveAttribute("content", /noindex/)
 
-  await page.goto("/bookings/not-a-number")
+  await page.goto("/bookings/not-a-uuid")
+  await expect(page.getByRole("heading", { name: "Booking not found" })).toBeVisible()
+
+  // Old integer-style URLs are not valid ids any more.
+  await page.goto("/bookings/1")
   await expect(page.getByRole("heading", { name: "Booking not found" })).toBeVisible()
 })

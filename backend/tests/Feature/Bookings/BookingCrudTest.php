@@ -111,14 +111,31 @@ describe('show', function () {
             ]]);
     });
 
-    it('returns a JSON 404 for a booking that does not exist', function () {
-        getJson('/api/bookings/999')
+    it('returns a JSON 404 for a booking that does not exist', function (string $id) {
+        getJson("/api/bookings/{$id}")
             ->assertNotFound()
             ->assertJsonStructure(['message']);
-    });
+    })->with([
+        'unknown uuid' => ['0194f3a2-7c1e-7b2a-9c4d-1a2b3c4d5e6f'],
+        'not a uuid' => ['not-a-uuid'],
+        'old-style integer id' => ['1'],
+    ]);
 });
 
 describe('store', function () {
+    it('identifies bookings by a time-ordered UUID, not a guessable number', function () {
+        $first = postJson('/api/bookings', bookingPayload())->assertCreated()->json('data.id');
+        $second = postJson('/api/bookings', bookingPayload(['starts_at' => '2030-03-07T09:00', 'ends_at' => '2030-03-07T10:00']))
+            ->assertCreated()
+            ->json('data.id');
+
+        expect($first)->toBeString()->toBeUuid()
+            ->and($second)->toBeUuid()
+            ->and(strcmp($first, $second))->toBeLessThan(0); // UUIDv7 sorts by creation time
+
+        getJson("/api/bookings/{$first}")->assertOk()->assertJsonPath('data.id', $first);
+    });
+
     it('creates a pending booking, normalising rego and converting workshop time to UTC', function () {
         $payload = bookingPayload();
 
@@ -197,7 +214,7 @@ describe('update', function () {
     });
 
     it('returns 404 when updating a missing booking', function () {
-        patchJson('/api/bookings/999', ['status' => 'confirmed'])->assertNotFound();
+        patchJson('/api/bookings/0194f3a2-7c1e-7b2a-9c4d-1a2b3c4d5e6f', ['status' => 'confirmed'])->assertNotFound();
     });
 });
 

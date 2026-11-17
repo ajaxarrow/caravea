@@ -43,7 +43,7 @@ async function EditBooking({ params }: Pick<PageProps<"/bookings/[id]/edit">, "p
 
   return (
     <>
-      <BackBar href={`/bookings/${id}`} label="Back to booking" trailing={`#${id}`} />
+      <BackBar href={`/bookings/${id}`} label="Back to booking" />
       <h1 className="display mb-8 text-[40px] sm:text-[52px]">Edit booking</h1>
       <BookingForm
         mode="edit"
