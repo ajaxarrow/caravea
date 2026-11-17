@@ -2,10 +2,10 @@ import { EnvelopeSimpleIcon, NoteIcon, PencilSimpleIcon } from "@phosphor-icons/
 import { cn } from "cn"
 import type { Metadata } from "next"
 import Link from "next/link"
-import { notFound } from "next/navigation"
 import { Suspense } from "react"
 
 import { BackBar } from "@/components/back-bar"
+import { BookingNotFound } from "@/components/bookings/booking-not-found"
 import { DeleteBooking } from "@/components/bookings/delete-booking"
 import { QuickStatus } from "@/components/bookings/quick-status"
 import { SavedNotice } from "@/components/bookings/saved-notice"
@@ -37,10 +37,10 @@ export default function BookingPage({ params, searchParams }: PageProps<"/bookin
 
 async function BookingDetail({ params, searchParams }: PageProps<"/bookings/[id]">) {
   const id = parseBookingId((await params).id)
-  if (!id) notFound()
+  if (!id) return <BookingNotFound />
 
   const [booking, workshop, { saved }] = await Promise.all([getBooking(id), getWorkshop(), searchParams])
-  if (!booking) notFound()
+  if (!booking) return <BookingNotFound />
 
   const tz = workshop.timezone
   const cancelled = booking.status === "cancelled"

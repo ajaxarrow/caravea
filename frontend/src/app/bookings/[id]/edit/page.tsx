@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
-import { notFound } from "next/navigation"
 import { Suspense } from "react"
 
 import { BackBar } from "@/components/back-bar"
+import { BookingNotFound } from "@/components/bookings/booking-not-found"
 import { BookingForm } from "@/components/bookings/booking-form"
 import { BookingFormSkeleton } from "@/components/bookings/form-skeleton"
 import { updateBooking } from "@/lib/bookings/actions"
@@ -34,10 +34,10 @@ export default function EditBookingPage({ params }: PageProps<"/bookings/[id]/ed
 
 async function EditBooking({ params }: Pick<PageProps<"/bookings/[id]/edit">, "params">) {
   const id = parseBookingId((await params).id)
-  if (!id) notFound()
+  if (!id) return <BookingNotFound />
 
   const [booking, workshop] = await Promise.all([getBooking(id), getWorkshop()])
-  if (!booking) notFound()
+  if (!booking) return <BookingNotFound />
 
   const tz = workshop.timezone
 
