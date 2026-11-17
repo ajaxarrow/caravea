@@ -57,8 +57,12 @@ export function toDateTimeLocal(iso: string, timeZone: string): string {
   return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`
 }
 
-/** Short zone name for labels, e.g. "AEDT". */
-export function timeZoneName(timeZone: string, at: Date = new Date()): string {
-  const p = parts(at.toISOString(), timeZone, { timeZoneName: "short" })
-  return p.timeZoneName
+/** Short zone name in effect at a given instant, e.g. "AEDT" or "AEST". */
+export function timeZoneName(timeZone: string, atIso: string): string {
+  return parts(atIso, timeZone, { timeZoneName: "short" }).timeZoneName
+}
+
+/** "Australia/Melbourne" → "Melbourne". Stable across DST, unlike "AEDT". */
+export function timeZoneCity(timeZone: string): string {
+  return (timeZone.split("/").pop() ?? timeZone).replaceAll("_", " ")
 }

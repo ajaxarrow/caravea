@@ -8,11 +8,10 @@ import type { SVGProps } from "react"
 export function CaravanIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" strokeWidth={16} strokeLinecap="round" strokeLinejoin="round" aria-hidden {...props}>
-      <path d="M200 176h-96M64 176H40a16 16 0 0 1-16-16V80a24 24 0 0 1 24-24h128a24 24 0 0 1 24 24v96" />
-      <circle cx="84" cy="180" r="20" />
-      <rect x="56" y="88" width="64" height="40" rx="8" />
-      <path d="M152 176V96a8 8 0 0 1 8-8h16a8 8 0 0 1 8 8v80" />
-      <path d="M200 160h24l16 16" />
+      <path d="M196 176H112M60 176H44a20 20 0 0 1-20-20V84a28 28 0 0 1 28-28h116a28 28 0 0 1 28 28v92" />
+      <circle cx="86" cy="180" r="22" />
+      <rect x="60" y="92" width="72" height="40" rx="10" />
+      <path d="M196 164h44" />
     </svg>
   )
 }

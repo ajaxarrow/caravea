@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest"
 
-import { formatDate, formatDuration, formatLongDate, formatTime, timeZoneName, toDateTimeLocal } from "./datetime"
+import {
+  formatDate,
+  formatDuration,
+  formatLongDate,
+  formatTime,
+  timeZoneCity,
+  timeZoneName,
+  toDateTimeLocal,
+} from "./datetime"
 
 const MELBOURNE = "Australia/Melbourne"
 
@@ -21,8 +29,8 @@ describe("workshop-time formatting", () => {
   it("respects daylight saving", () => {
     // July is AEST (UTC+10): 23:00 UTC is 9am, not 10am.
     expect(formatTime("2030-07-01T23:00:00Z", MELBOURNE)).toBe("9:00am")
-    expect(timeZoneName(MELBOURNE, new Date("2030-07-01T00:00:00Z"))).toBe("AEST")
-    expect(timeZoneName(MELBOURNE, new Date("2030-01-01T00:00:00Z"))).toBe("AEDT")
+    expect(timeZoneName(MELBOURNE, "2030-07-01T00:00:00Z")).toBe("AEST")
+    expect(timeZoneName(MELBOURNE, "2030-01-01T00:00:00Z")).toBe("AEDT")
   })
 })
 
@@ -46,5 +54,15 @@ describe("formatDuration", () => {
     ["2030-03-06T09:00:00Z", "2030-03-08T09:00:00Z", "2d"],
   ])("%s → %s is %s", (start, end, expected) => {
     expect(formatDuration(start, end)).toBe(expected)
+  })
+})
+
+describe("timeZoneCity", () => {
+  it.each([
+    ["Australia/Melbourne", "Melbourne"],
+    ["America/Los_Angeles", "Los Angeles"],
+    ["UTC", "UTC"],
+  ])("%s → %s", (tz, city) => {
+    expect(timeZoneCity(tz)).toBe(city)
   })
 })

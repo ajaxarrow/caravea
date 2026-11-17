@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $bays = collect(['Bay 1 · General service', 'Bay 2 · General service', 'Bay 3 · Chassis & axles', 'Bay 4 · Gas & electrical'])
+        $bays = collect(['Bay 1', 'Bay 2', 'Bay 3 (chassis & axles)', 'Bay 4 (gas & electrical)'])
             ->map(fn (string $name) => ServiceBay::create(['name' => $name]));
 
         $tz = config('workshop.timezone');
