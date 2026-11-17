@@ -36,9 +36,12 @@ function first(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value
 }
 
-/** Route param → booking id, or null for anything that can't be one. */
-export function parseBookingId(raw: string): number | null {
-  if (!/^\d{1,15}$/.test(raw)) return null
-  const id = Number(raw)
-  return id > 0 ? id : null
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+/**
+ * Route param (or Server Action argument) → booking id, or null for anything
+ * that isn't a UUID. Rejecting junk here means it never reaches the API.
+ */
+export function parseBookingId(raw: unknown): string | null {
+  return typeof raw === "string" && UUID.test(raw) ? raw.toLowerCase() : null
 }

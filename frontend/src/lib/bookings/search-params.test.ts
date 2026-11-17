@@ -48,11 +48,24 @@ describe("bookingsHref", () => {
 })
 
 describe("parseBookingId", () => {
-  it("accepts positive integers", () => {
-    expect(parseBookingId("42")).toBe(42)
+  it("accepts a UUID and normalises it to lower case", () => {
+    expect(parseBookingId("0194F3A2-7C1E-7B2A-9C4D-1A2B3C4D5E6F")).toBe("0194f3a2-7c1e-7b2a-9c4d-1a2b3c4d5e6f")
   })
 
-  it.each(["0", "-1", "1.5", "abc", "1e3", " 7", "", "1234567890123456"])("rejects %j", (raw) => {
+  it.each([
+    "42",
+    "abc",
+    "",
+    "0194f3a2-7c1e-7b2a-9c4d-1a2b3c4d5e6", // one char short
+    "0194f3a2-7c1e-7b2a-9c4d-1a2b3c4d5e6fz",
+    "0194f3a27c1e7b2a9c4d1a2b3c4d5e6f", // no dashes
+    "../0194f3a2-7c1e-7b2a-9c4d-1a2b3c4d5e6f",
+  ])("rejects %j", (raw) => {
     expect(parseBookingId(raw)).toBeNull()
+  })
+
+  it("rejects non-strings (Server Action arguments are untrusted)", () => {
+    expect(parseBookingId(42)).toBeNull()
+    expect(parseBookingId(null)).toBeNull()
   })
 })

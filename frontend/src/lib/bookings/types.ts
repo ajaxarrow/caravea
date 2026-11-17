@@ -13,7 +13,8 @@ export type ServiceBay = {
 
 /** A booking as returned by the Laravel API. Datetimes are UTC ISO-8601. */
 export type Booking = {
-  id: number
+  /** UUIDv7 */
+  id: string
   customer_name: string
   customer_email: string
   rego: string

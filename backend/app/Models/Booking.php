@@ -8,12 +8,13 @@ use Database\Factories\BookingFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
+ * @property string $id UUIDv7
  * @property int $service_bay_id
  * @property string $customer_name
  * @property string $customer_email
@@ -36,7 +37,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Booking extends Model
 {
     /** @use HasFactory<BookingFactory> */
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     protected $attributes = [
         'status' => 'pending',

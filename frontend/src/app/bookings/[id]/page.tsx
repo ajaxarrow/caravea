@@ -63,7 +63,6 @@ async function BookingDetail({ params, searchParams }: PageProps<"/bookings/[id]
                 Registration <span className="text-ink-soft font-medium tracking-wide">{booking.rego}</span>
               </p>
             </div>
-            <span className="text-muted-ink tabular ml-auto hidden text-[13px] sm:block">#{booking.id}</span>
           </header>
 
           <Timeline booking={booking} timeZone={tz} />
@@ -117,6 +116,9 @@ async function BookingDetail({ params, searchParams }: PageProps<"/bookings/[id]
                 <EnvelopeSimpleIcon className="size-4" aria-hidden />
                 {booking.customer_email}
               </a>
+            </Row>
+            <Row label="Reference">
+              <span className="text-ink-soft tabular text-[12px] break-all">{booking.id}</span>
             </Row>
             <Row label="Booked">{formatDate(booking.created_at, tz)}</Row>
             <Row label="Last changed">

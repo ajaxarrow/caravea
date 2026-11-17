@@ -9,7 +9,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('bookings', function (Blueprint $table) {
-            $table->id();
+            // UUIDv7: not guessable or enumerable from a URL, safe to generate
+            // anywhere (imports, other services), and still time-ordered so
+            // inserts stay index-friendly.
+            $table->uuid('id')->primary();
             $table->foreignId('service_bay_id')->constrained()->restrictOnDelete();
             $table->string('customer_name', 120);
             $table->string('customer_email');
