@@ -53,7 +53,7 @@ export default defineConfig({
       env: { API_URL: `http://127.0.0.1:${PROXY_PORT}/api` },
       // A static file: hitting a page here would warm Next's data cache
       // before the tests that need it cold.
-      url: `http://127.0.0.1:${WEB_PORT}/favicon.ico`,
+      url: `http://127.0.0.1:${WEB_PORT}/icon.svg`,
       reuseExistingServer: false,
       timeout: 240_000,
     },
