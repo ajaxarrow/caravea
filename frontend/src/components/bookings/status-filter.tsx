@@ -1,8 +1,9 @@
 import { cn } from "cn"
-import Link from "next/link"
 
 import { bookingsHref } from "@/lib/bookings/search-params"
 import type { BookingStatus, StatusCounts } from "@/lib/bookings/types"
+
+import { ListLink } from "./list-navigation"
 
 const OPTIONS: { status: BookingStatus | null; label: string }[] = [
   { status: null, label: "All bookings" },
@@ -21,11 +22,10 @@ export function StatusFilter({ active, counts }: { active: BookingStatus | null;
       {OPTIONS.map(({ status, label }, i) => {
         const isActive = status === active
         return (
-          <Link
+          <ListLink
             key={label}
             href={bookingsHref({ status })}
             aria-current={isActive ? "page" : undefined}
-            scroll={false}
             className={cn(
               "group focus-visible:ring-ink relative flex flex-col gap-1 px-5 py-6 transition-colors focus-visible:z-10 focus-visible:ring-2 focus-visible:outline-none sm:py-8",
               i > 0 && "sm:border-line sm:border-l",
@@ -43,7 +43,7 @@ export function StatusFilter({ active, counts }: { active: BookingStatus | null;
             </span>
             <span className={cn("text-[13px]", isActive ? "text-ink" : "text-muted-ink")}>{label}</span>
             {isActive && <span aria-hidden className="bg-ink absolute inset-x-5 -bottom-px h-0.5" />}
-          </Link>
+          </ListLink>
         )
       })}
     </nav>

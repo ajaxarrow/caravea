@@ -1,9 +1,10 @@
 import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react/ssr"
 import { cn } from "cn"
-import Link from "next/link"
 
 import { bookingsHref } from "@/lib/bookings/search-params"
 import type { BookingStatus } from "@/lib/bookings/types"
+
+import { ListLink } from "./list-navigation"
 
 /** "2 / 5" with a progress line, as in the reference's step indicator. */
 export function Pagination({
@@ -68,9 +69,9 @@ function PageLink({ href, label, children }: { href: string | null; label: strin
   }
 
   return (
-    <Link href={href} className={className} scroll={false}>
+    <ListLink href={href} className={className}>
       {children}
       <span className="sr-only">{label}</span>
-    </Link>
+    </ListLink>
   )
 }

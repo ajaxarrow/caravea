@@ -4,6 +4,7 @@ import { Suspense } from "react"
 
 import { BookingRow } from "@/components/bookings/booking-row"
 import { Hero } from "@/components/bookings/hero"
+import { ListNavigation } from "@/components/bookings/list-navigation"
 import { Pagination } from "@/components/bookings/pagination"
 import { SavedNotice } from "@/components/bookings/saved-notice"
 import { BookingListSkeleton } from "@/components/bookings/skeletons"
@@ -53,40 +54,42 @@ async function BookingResults({ searchParams }: Pick<PageProps<"/bookings">, "se
         <p className="text-muted-ink text-[13px]">Times shown in {timeZoneCity(workshop.timezone)} time</p>
       </div>
 
-      <StatusFilter active={query.status} counts={meta.status_counts} />
+      <ListNavigation>
+        <StatusFilter active={query.status} counts={meta.status_counts} />
 
-      {bookings.length > 0 ? (
-        <ul className="mt-8 flex flex-col gap-3">
-          {bookings.map((booking) => (
-            <BookingRow key={booking.id} booking={booking} timeZone={workshop.timezone} />
-          ))}
-        </ul>
-      ) : (
-        <EmptyState
-          title={outOfRange ? `There is no page ${query.page}` : "No bookings here yet"}
-          body={
-            outOfRange
-              ? `This list only has ${meta.last_page} ${meta.last_page === 1 ? "page" : "pages"}.`
-              : query.status
-                ? `Nothing is ${query.status} right now.`
-                : "Book a caravan into a service bay to get started."
-          }
-          action={
-            outOfRange
-              ? { href: bookingsHref({ status: query.status }), label: "Go to the first page" }
-              : { href: "/bookings/new", label: "New booking" }
-          }
+        {bookings.length > 0 ? (
+          <ul className="mt-8 flex flex-col gap-3">
+            {bookings.map((booking) => (
+              <BookingRow key={booking.id} booking={booking} timeZone={workshop.timezone} />
+            ))}
+          </ul>
+        ) : (
+          <EmptyState
+            title={outOfRange ? `There is no page ${query.page}` : "No bookings here yet"}
+            body={
+              outOfRange
+                ? `This list only has ${meta.last_page} ${meta.last_page === 1 ? "page" : "pages"}.`
+                : query.status
+                  ? `Nothing is ${query.status} right now.`
+                  : "Book a caravan into a service bay to get started."
+            }
+            action={
+              outOfRange
+                ? { href: bookingsHref({ status: query.status }), label: "Go to the first page" }
+                : { href: "/bookings/new", label: "New booking" }
+            }
+          />
+        )}
+
+        <Pagination
+          status={query.status}
+          page={meta.current_page}
+          lastPage={meta.last_page}
+          from={meta.from}
+          to={meta.to}
+          total={meta.total}
         />
-      )}
-
-      <Pagination
-        status={query.status}
-        page={meta.current_page}
-        lastPage={meta.last_page}
-        from={meta.from}
-        to={meta.to}
-        total={meta.total}
-      />
+      </ListNavigation>
     </>
   )
 }
