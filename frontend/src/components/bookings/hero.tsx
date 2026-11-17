@@ -26,7 +26,11 @@ export function Hero() {
         viewBox="0 0 1200 220"
         preserveAspectRatio="none"
       >
-        <path d="M0 92 C 160 60 300 74 430 88 S 720 70 860 82 S 1100 64 1200 80 V220 H0Z" fill="#5d5059" opacity="0.55" />
+        <path
+          d="M0 92 C 160 60 300 74 430 88 S 720 70 860 82 S 1100 64 1200 80 V220 H0Z"
+          fill="#5d5059"
+          opacity="0.55"
+        />
         <path d="M0 124 C 220 104 380 116 560 118 S 940 100 1200 116 V220 H0Z" fill="#3a3236" />
         <path d="M540 118 L660 118 L1020 220 L180 220Z" fill="#2b2629" />
         <path d="M600 122 L600 220" stroke="#e9c79b" strokeWidth="3" strokeDasharray="10 14" opacity="0.7" />
@@ -42,18 +46,18 @@ export function Hero() {
       <div className="absolute inset-x-0 bottom-6 flex justify-center px-4">
         <Link
           href="/bookings/new"
-          className="group flex w-full max-w-md items-center gap-4 rounded-full bg-surface py-2 pr-2 pl-6 text-left shadow-[0_8px_30px_rgba(20,16,18,0.18)] transition-transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#3a3236] focus-visible:outline-none"
+          className="group bg-surface flex w-full max-w-md items-center gap-4 rounded-full py-2 pr-2 pl-6 text-left shadow-[0_8px_30px_rgba(20,16,18,0.18)] transition-transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#3a3236] focus-visible:outline-none"
         >
           <span className="flex-1">
-            <span className="block text-[12px] text-muted-ink">New booking</span>
-            <span className="block text-[15px] text-ink">Pick a bay and a time</span>
+            <span className="text-muted-ink block text-[12px]">New booking</span>
+            <span className="text-ink block text-[15px]">Pick a bay and a time</span>
           </span>
-          <span aria-hidden className="h-8 w-px bg-line" />
+          <span aria-hidden className="bg-line h-8 w-px" />
           <span className="hidden flex-1 sm:block">
-            <span className="block text-[12px] text-muted-ink">Overlaps</span>
-            <span className="block text-[15px] text-ink">Checked for you</span>
+            <span className="text-muted-ink block text-[12px]">Overlaps</span>
+            <span className="text-ink block text-[15px]">Checked for you</span>
           </span>
-          <span className="flex size-11 items-center justify-center rounded-full bg-ink text-white transition-colors group-hover:bg-ink-soft">
+          <span className="bg-ink group-hover:bg-ink-soft flex size-11 items-center justify-center rounded-full text-white transition-colors">
             <ArrowUpRightIcon className="size-4" weight="bold" aria-hidden />
           </span>
         </Link>

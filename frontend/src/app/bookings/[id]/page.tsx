@@ -50,20 +50,20 @@ async function BookingDetail({ params, searchParams }: PageProps<"/bookings/[id]
       <SavedNotice saved={saved} />
       <div className="grid gap-4 lg:grid-cols-[1.35fr_1fr]">
         {/* Booking card */}
-        <article aria-labelledby="booking-title" className="rounded-3xl border border-line bg-surface p-5 sm:p-7">
+        <article aria-labelledby="booking-title" className="border-line bg-surface rounded-3xl border p-5 sm:p-7">
           <header className="flex items-center gap-4">
-            <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-canvas text-ink">
+            <span className="bg-canvas text-ink flex size-14 shrink-0 items-center justify-center rounded-2xl">
               <CaravanIcon className="size-8" />
             </span>
             <div className="min-w-0">
-              <h1 id="booking-title" className="truncate text-[22px] tracking-tight text-ink">
+              <h1 id="booking-title" className="text-ink truncate text-[22px] tracking-tight">
                 {booking.customer_name}
               </h1>
-              <p className="mt-0.5 text-[13px] text-muted-ink">
-                Registration <span className="font-medium tracking-wide text-ink-soft">{booking.rego}</span>
+              <p className="text-muted-ink mt-0.5 text-[13px]">
+                Registration <span className="text-ink-soft font-medium tracking-wide">{booking.rego}</span>
               </p>
             </div>
-            <span className="ml-auto hidden text-[13px] text-muted-ink tabular sm:block">#{booking.id}</span>
+            <span className="text-muted-ink tabular ml-auto hidden text-[13px] sm:block">#{booking.id}</span>
           </header>
 
           <Timeline booking={booking} timeZone={tz} />
@@ -79,8 +79,8 @@ async function BookingDetail({ params, searchParams }: PageProps<"/bookings/[id]
             </Tile>
           </dl>
 
-          <div className="mt-6 border-t border-line pt-6">
-            <h2 className="flex items-center gap-2 text-[13px] text-muted-ink">
+          <div className="border-line mt-6 border-t pt-6">
+            <h2 className="text-muted-ink flex items-center gap-2 text-[13px]">
               <NoteIcon className="size-4" aria-hidden />
               Notes for the workshop
             </h2>
@@ -91,18 +91,29 @@ async function BookingDetail({ params, searchParams }: PageProps<"/bookings/[id]
         </article>
 
         {/* Summary panel */}
-        <aside aria-label="Booking summary" className="flex flex-col rounded-3xl border border-line bg-surface p-5 sm:p-7">
-          <p className="text-[13px] text-muted-ink">{formatLongDate(booking.starts_at, tz)}</p>
-          <p className={cn("display mt-2 text-[64px] text-ink tabular sm:text-[80px]", cancelled && "text-ink/30 line-through decoration-2")}>
+        <aside
+          aria-label="Booking summary"
+          className="border-line bg-surface flex flex-col rounded-3xl border p-5 sm:p-7"
+        >
+          <p className="text-muted-ink text-[13px]">{formatLongDate(booking.starts_at, tz)}</p>
+          <p
+            className={cn(
+              "display text-ink tabular mt-2 text-[64px] sm:text-[80px]",
+              cancelled && "text-ink/30 line-through decoration-2",
+            )}
+          >
             {formatTime(booking.starts_at, tz)}
           </p>
-          <p className="text-[13px] text-muted-ink">
+          <p className="text-muted-ink text-[13px]">
             Drop-off, {booking.service_bay.name}. Times in {timeZoneName(tz, booking.starts_at)}.
           </p>
 
-          <dl className="mt-8 space-y-3 border-t border-line pt-6 text-[14px]">
+          <dl className="border-line mt-8 space-y-3 border-t pt-6 text-[14px]">
             <Row label="Customer email">
-              <a href={`mailto:${booking.customer_email}`} className="inline-flex items-center gap-1.5 text-ink underline-offset-4 hover:underline">
+              <a
+                href={`mailto:${booking.customer_email}`}
+                className="text-ink inline-flex items-center gap-1.5 underline-offset-4 hover:underline"
+              >
                 <EnvelopeSimpleIcon className="size-4" aria-hidden />
                 {booking.customer_email}
               </a>
@@ -122,7 +133,7 @@ async function BookingDetail({ params, searchParams }: PageProps<"/bookings/[id]
               bookingId={booking.id}
               status={booking.status}
               customerName={booking.customer_name}
-              className="items-stretch [&>div]:grid [&>div]:auto-cols-fr [&>div]:grid-flow-col [&_p]:text-left"
+              className="items-stretch [&_p]:text-left [&>div]:grid [&>div]:auto-cols-fr [&>div]:grid-flow-col"
             />
             <DeleteBooking bookingId={booking.id} />
           </div>
@@ -139,21 +150,24 @@ function Timeline({ booking, timeZone }: { booking: Booking; timeZone: string })
   ]
 
   return (
-    <ol className="relative mt-7 space-y-6 border-t border-line pt-7">
-      <span aria-hidden className="absolute top-[calc(1.75rem+0.6rem)] bottom-[0.6rem] left-[4.5px] w-px bg-ink" />
+    <ol className="border-line relative mt-7 space-y-6 border-t pt-7">
+      <span aria-hidden className="bg-ink absolute top-[calc(1.75rem+0.6rem)] bottom-[0.6rem] left-[4.5px] w-px" />
       {stops.map((stop) => (
         <li key={stop.label} className="relative grid grid-cols-[auto_1fr_auto] items-start gap-4">
           <span
             aria-hidden
-            className={cn("mt-1.5 size-2.5 rounded-full border-[1.5px] border-ink", stop.filled ? "bg-ink" : "bg-surface")}
+            className={cn(
+              "border-ink mt-1.5 size-2.5 rounded-full border-[1.5px]",
+              stop.filled ? "bg-ink" : "bg-surface",
+            )}
           />
           <div>
-            <p className="text-[16px] text-ink">{stop.label}</p>
-            <p className="text-[13px] text-muted-ink">
+            <p className="text-ink text-[16px]">{stop.label}</p>
+            <p className="text-muted-ink text-[13px]">
               {formatDate(stop.at, timeZone)}, {booking.service_bay.name}
             </p>
           </div>
-          <time dateTime={stop.at} className="tabular text-[18px] text-ink">
+          <time dateTime={stop.at} className="tabular text-ink text-[18px]">
             {formatTime(stop.at, timeZone)}
           </time>
         </li>
@@ -164,9 +178,9 @@ function Timeline({ booking, timeZone }: { booking: Booking; timeZone: string })
 
 function Tile({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-line px-4 py-3">
-      <dt className="text-[12px] text-muted-ink">{label}</dt>
-      <dd className="mt-1 text-[15px] text-ink">{children}</dd>
+    <div className="border-line rounded-2xl border px-4 py-3">
+      <dt className="text-muted-ink text-[12px]">{label}</dt>
+      <dd className="text-ink mt-1 text-[15px]">{children}</dd>
     </div>
   )
 }
@@ -175,7 +189,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
   return (
     <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
       <dt className="text-muted-ink">{label}</dt>
-      <dd className="text-right text-ink">{children}</dd>
+      <dd className="text-ink text-right">{children}</dd>
     </div>
   )
 }

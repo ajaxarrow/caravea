@@ -19,19 +19,19 @@ export function RouteLine({
 }) {
   return (
     <div className={cn("grid grid-cols-[auto_1fr_auto] items-center gap-3", muted && "opacity-50")}>
-      <time dateTime={startsAt} className="tabular text-[15px] text-ink">
+      <time dateTime={startsAt} className="tabular text-ink text-[15px]">
         {formatTime(startsAt, timeZone)}
       </time>
       <span className="relative flex items-center">
-        <span aria-hidden className="size-2 rounded-full bg-ink" />
-        <span aria-hidden className="h-px flex-1 bg-ink/70" />
-        <span className="absolute left-1/2 -translate-x-1/2 bg-surface px-2 text-[12px] text-muted-ink">
+        <span aria-hidden className="bg-ink size-2 rounded-full" />
+        <span aria-hidden className="bg-ink/70 h-px flex-1" />
+        <span className="bg-surface text-muted-ink absolute left-1/2 -translate-x-1/2 px-2 text-[12px]">
           <span className="sr-only">Duration </span>
           {formatDuration(startsAt, endsAt)}
         </span>
-        <span aria-hidden className="size-2 rounded-full border-[1.5px] border-ink bg-surface" />
+        <span aria-hidden className="border-ink bg-surface size-2 rounded-full border-[1.5px]" />
       </span>
-      <time dateTime={endsAt} className="tabular text-[15px] text-ink">
+      <time dateTime={endsAt} className="tabular text-ink text-[15px]">
         {formatTime(endsAt, timeZone)}
       </time>
     </div>

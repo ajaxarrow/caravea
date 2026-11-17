@@ -17,7 +17,7 @@ const OPTIONS: { status: BookingStatus | null; label: string }[] = [
  */
 export function StatusFilter({ active, counts }: { active: BookingStatus | null; counts: StatusCounts }) {
   return (
-    <nav aria-label="Filter by status" className="grid grid-cols-2 border-y border-line sm:grid-cols-4">
+    <nav aria-label="Filter by status" className="border-line grid grid-cols-2 border-y sm:grid-cols-4">
       {OPTIONS.map(({ status, label }, i) => {
         const isActive = status === active
         return (
@@ -27,10 +27,10 @@ export function StatusFilter({ active, counts }: { active: BookingStatus | null;
             aria-current={isActive ? "page" : undefined}
             scroll={false}
             className={cn(
-              "group relative flex flex-col gap-1 px-5 py-6 transition-colors focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ink focus-visible:outline-none sm:py-8",
-              i > 0 && "sm:border-l sm:border-line",
-              i % 2 === 1 && "border-l border-line",
-              i > 1 && "border-t border-line sm:border-t-0",
+              "group focus-visible:ring-ink relative flex flex-col gap-1 px-5 py-6 transition-colors focus-visible:z-10 focus-visible:ring-2 focus-visible:outline-none sm:py-8",
+              i > 0 && "sm:border-line sm:border-l",
+              i % 2 === 1 && "border-line border-l",
+              i > 1 && "border-line border-t sm:border-t-0",
             )}
           >
             <span
@@ -42,7 +42,7 @@ export function StatusFilter({ active, counts }: { active: BookingStatus | null;
               {counts[status ?? "all"]}
             </span>
             <span className={cn("text-[13px]", isActive ? "text-ink" : "text-muted-ink")}>{label}</span>
-            {isActive && <span aria-hidden className="absolute inset-x-5 -bottom-px h-0.5 bg-ink" />}
+            {isActive && <span aria-hidden className="bg-ink absolute inset-x-5 -bottom-px h-0.5" />}
           </Link>
         )
       })}
