@@ -34,9 +34,11 @@ export function QuickStatus({
 }) {
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
+  const [target, setTarget] = useState<BookingStatus | null>(null)
 
   function change(to: BookingStatus) {
     setError(null)
+    setTarget(to)
     startTransition(async () => {
       const result = await setBookingStatus(bookingId, to)
       if (!result.ok) setError(result.message)
@@ -46,18 +48,22 @@ export function QuickStatus({
   return (
     <div className={cn("flex flex-col items-end gap-1.5", className)}>
       <div className="flex gap-1.5" aria-busy={isPending}>
-        {NEXT_ACTIONS[status].map(({ to, label }) => (
-          <Button
-            key={to}
-            size="sm"
-            variant={to === "confirmed" ? "default" : "outline"}
-            disabled={isPending}
-            onClick={() => change(to)}
-            aria-label={`${label} booking for ${customerName}`}
-          >
-            {label}
-          </Button>
-        ))}
+        {NEXT_ACTIONS[status].map(({ to, label }) => {
+          const saving = isPending && target === to
+          return (
+            <Button
+              key={to}
+              size="sm"
+              variant={to === "confirmed" ? "default" : "outline"}
+              disabled={isPending}
+              onClick={() => change(to)}
+              // While saving, the visible text is the accessible name.
+              aria-label={saving ? undefined : `${label} booking for ${customerName}`}
+            >
+              {saving ? "Saving…" : label}
+            </Button>
+          )
+        })}
       </div>
       {error && (
         <p role="alert" className="text-danger max-w-64 text-right text-[12px] leading-snug">

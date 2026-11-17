@@ -8,12 +8,11 @@ import { buttonVariants } from "@/components/ui/button"
  * or unknown. These pages stream, so `notFound()` would only ever abort the
  * streamed component mid-render — which also trips React's dev profiler
  * ("Performance.measure … cannot be negative"). Returning the UI gives the
- * same result, and React hoists the robots meta into <head>.
+ * same result; `noindex` is sent as an X-Robots-Tag header (next.config.ts).
  */
 export function BookingNotFound() {
   return (
     <div className="border-line bg-surface flex flex-col items-center rounded-3xl border px-6 py-16 text-center">
-      <meta name="robots" content="noindex" />
       <span className="bg-canvas text-ink flex size-12 items-center justify-center rounded-full">
         <MagnifyingGlassIcon className="size-5" aria-hidden />
       </span>

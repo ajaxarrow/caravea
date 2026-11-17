@@ -1,11 +1,10 @@
 "use server"
 
-import { updateTag } from "next/cache"
+import { refresh } from "next/cache"
 import { redirect } from "next/navigation"
 
 import { api, ApiError, ValidationError } from "@/lib/api"
 
-import { tags } from "./cache"
 import { mapValidationErrors, readBookingForm, toApiPayload, type BookingFormState } from "./form"
 import { parseBookingId } from "./search-params"
 import { isBookingStatus, type Booking, type BookingFormValues, type BookingStatus } from "./types"
@@ -28,7 +27,7 @@ export async function createBooking(_prev: BookingFormState, formData: FormData)
     return failedState(error, values, _prev)
   }
 
-  updateTag(tags.list)
+  // Reads aren't cached, so the redirect target renders fresh data.
   redirect(`/bookings/${booking.id}?saved=created`)
 }
 
@@ -46,8 +45,6 @@ export async function updateBooking(
     return failedState(error, values, _prev)
   }
 
-  updateTag(tags.list)
-  updateTag(tags.booking(id))
   redirect(`/bookings/${id}?saved=updated`)
 }
 
@@ -64,10 +61,9 @@ export async function setBookingStatus(id: string, status: BookingStatus): Promi
     return { ok: false, message: messageFor(error) }
   }
 
-  // Re-renders the current route in this same response, so the list
-  // reflects the change without a reload.
-  updateTag(tags.list)
-  updateTag(tags.booking(id))
+  // Re-renders the current route (list or detail) in this same response,
+  // so it reflects the change without a reload.
+  refresh()
   return { ok: true }
 }
 
@@ -80,8 +76,6 @@ export async function deleteBooking(id: string): Promise<QuickActionResult> {
     return { ok: false, message: messageFor(error) }
   }
 
-  updateTag(tags.list)
-  updateTag(tags.booking(id))
   redirect("/bookings?saved=deleted")
 }
 

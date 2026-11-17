@@ -1,4 +1,6 @@
-import { expect, test, type Page } from "@playwright/test"
+import type { Page } from "@playwright/test"
+
+import { expect, test } from "./support/test"
 
 /*
  * Bookings are created through the UI (not straight against the API), so
@@ -207,9 +209,10 @@ test("edits a booking with its times pre-filled in workshop time", async ({ page
 })
 
 test("shows a not-found page for a booking that doesn't exist", async ({ page }) => {
-  await page.goto("/bookings/0194f3a2-7c1e-7b2a-9c4d-1a2b3c4d5e6f")
+  const response = await page.goto("/bookings/0194f3a2-7c1e-7b2a-9c4d-1a2b3c4d5e6f")
   await expect(page.getByRole("heading", { name: "Booking not found" })).toBeVisible()
-  await expect(page.locator('head meta[name="robots"]')).toHaveAttribute("content", /noindex/)
+  // The page streams (so the status is 200); search engines are kept out by header.
+  expect(response?.headers()["x-robots-tag"]).toBe("noindex, nofollow")
 
   await page.goto("/bookings/not-a-uuid")
   await expect(page.getByRole("heading", { name: "Booking not found" })).toBeVisible()

@@ -7,7 +7,7 @@ import { useEffect } from "react"
 import { Button, buttonVariants } from "@/components/ui/button"
 
 /**
- * Covers the list, detail and form pages. Server errors arrive with a
+ * Covers the list, detail, edit and new-booking pages. Server errors arrive with a
  * generic message in production, so we don't echo it; the digest ties the
  * screen to the server log entry.
  */
@@ -27,9 +27,9 @@ export default function BookingsError({ error, retry }: { error: unknown; retry:
         <span className="bg-danger/10 text-danger flex size-12 items-center justify-center rounded-full">
           <WarningIcon className="size-6" aria-hidden />
         </span>
-        <h1 className="mt-5 text-2xl font-normal tracking-tight">Bookings couldn&apos;t be loaded</h1>
+        <h1 className="mt-5 text-2xl font-normal tracking-tight">Something went wrong loading this page</h1>
         <p className="text-muted-ink mt-2 max-w-md text-[15px]">
-          The bookings service didn&apos;t respond. Check that the Laravel API is running, then try again.
+          The bookings service may be unavailable. Try again, or go back to the bookings list.
         </p>
         <div className="mt-8 flex gap-2">
           <Button onClick={() => retry()}>
